@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.ImposterProtoChunk;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.extensions.IForgeBlockGetter;
+import org.embeddedt.forgeblockentityfix.VersionHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -21,7 +22,7 @@ public interface IForgeBlockGetterMixin {
     @Overwrite(remap = false)
     default @Nullable BlockEntity getExistingBlockEntity(BlockPos pos) {
         if (this instanceof Level level) {
-            BlockGetter getter = level.getChunkSource().getChunkForLighting(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
+            BlockGetter getter = VersionHelper.getChunkForLighting(level.getChunkSource(), SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
             return getter != null ? getter.getExistingBlockEntity(pos) : null;
         } else if (this instanceof LevelChunk chunk) {
             return chunk.getBlockEntities().get(pos);
